@@ -2,17 +2,31 @@
 
 import { Fragment } from "react";
 import { MouseEvent } from "react";
-import {useState} from "react";
+import { useState } from "react";
 
-function ListGroup() {
-  const items = ["New York", "Paris", "Tokyo", "London", "San Francisco ", ""];
+
+//Passing Data via Props
+interface ListProps {
+  items: string[];
+  heading: string;
+  onSelectItem: (item: string) => void;
+}
+
+//We can use an interface to pass data to functions
+
+//function ListGroup(props: ListProps)
+//would need to prefix props. before all attributes
+
+function ListGroup({ items, heading, onSelectItem }: ListProps) {
+  //const items = ["New York", "Paris", "Tokyo", "London", "San Francisco ", ""];
   // items = [];
   //let selectedIndex = 0;
 
-  //Hook
-  const [selectedIndex , setSelectedIndex] =  useState(-1);
-  const [name,setName] = useState('');
-  
+
+  //Managing State
+  //Hook - a function that allows us to use built in functions in react
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  //using the state tells react that this component can have data that will change overtimr
 
   //const message = items.length === 0 ?  <p>No items found</p> : null;
 
@@ -41,14 +55,14 @@ function ListGroup() {
     <Fragment>
       {/*or just use an empty anchor tags  <> and </> */}
       {/** When rendering a list of items using the map method, each item should have a unique key ; item is the unique key since the elements in the array are unique  */}
-      <h1>List Group</h1>
+      <h1>{heading}</h1>
       {/*Utilising Conditional Rendering*/}
       {getMessage()}
       {items.length === 0 && <p>No items found</p>}
       <ul className="list-group">
         {items.map((item, index) => (
           <li
-            //If the index is the same as the selectedIndex , then add it to the active class which hoghlights it
+            //If the index is the same as the selectedIndex , then add it to the active class which highlights it
             className={
               selectedIndex === index
                 ? "list-group-item active"
@@ -56,8 +70,11 @@ function ListGroup() {
             }
             key={item}
             /*onClick={() => console.log("Clicked", item, index)}*/
-           // onClick={handleClick}
-            onClick={() => {setSelectedIndex(index);}}
+            // onClick={handleClick}
+            onClick={() => {
+              setSelectedIndex(index);
+              onSelectItem(item);
+            }}
           >
             {item}
           </li>
